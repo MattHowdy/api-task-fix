@@ -9,7 +9,7 @@ const routes = require('./routes')
 
 
 dotenv.config()
-const PORT = process.env.BACKEND_PORT || 4001
+const PORT = process.env.PORT || 4001
 
 // mongoose.set('useFindAndModify', false)
 // mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
