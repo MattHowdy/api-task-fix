@@ -1,5 +1,4 @@
 const express = require('express');
-const { mongo } = require('mongoose');
 const router = express.Router()
 const Task = require('./model/Task')
 
@@ -10,30 +9,13 @@ router.get('/', (req, res) => {
 
 
 router.get('/tasks', async(req, res) => { 
-    await Task.find({}, (err, result)=>{
-        if(err){
-            res.send(err)
-        }else{
-            res.send(result)
-        }
-    })
+    await Task.find()
+        .then(task => res.send(task))
+        .catch( err => res.send(err))
 });
 
 
-router.post('/tasks/clean-reset', async(req, res)=>{
-    await task.collection.drop()
-
-    await task.insertMany(tasksJson, (err, result)=>{
-        if(err){
-            res.send(err)
-        }else{
-            res.send(result)
-        }
-    })
-})
-
-router.post('/tasks/create-task', (req,res) =>{
-
+router.post('/tasks/create', async(req,res) =>{
     let task = new Task({
         value : req.body.task,
         status : 1,
@@ -41,12 +23,34 @@ router.post('/tasks/create-task', (req,res) =>{
         user_id : 1
     })
 
-    task.save()
+    await task.save()
         .then(task => res.send(task))
         .catch( err => res.send(err))
     
 })
 
+router.delete('/tasks/delete/:id', async(req,res)=>{
+    await Task.findOneAndDelete({ _id :req.params.id})
+        .then(task => res.send(task))
+        .catch( err => res.send(err))
+})
 
+
+router.patch('/tasks/update/:id', async(req, res)=>{
+    let task = Task.findById(req.params.id)
+
+    await task.updateOne({ value : req.body.value, isEditing: false})
+        .then( task=> res.send(task))
+        .catch( err => res.send(err))
+})
+
+
+router.post('/tasks/clean-reset', async(req, res)=>{
+    await task.collection.drop()
+
+    await task.insertMany(tasksJson)
+        .then( res => res.send(err) )
+        .catch( err => res.send(err))
+})
 
 module.exports = router ;
