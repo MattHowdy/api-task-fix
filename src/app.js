@@ -22,7 +22,7 @@ app.use(
   })
 )
 const whitelist = [
-    'http://localhost:4001', 'https://task-fix.herokuapp.com/'
+    'http://localhost:4001', 'https://web-task-fix.herokuapp.com/'
 ]
 
 const corsOptions = {
