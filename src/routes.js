@@ -1,38 +1,52 @@
-const express = require('express')
+const express = require('express');
+const { mongo } = require('mongoose');
 const router = express.Router()
+const Task = require('./model/Task')
 
 
 router.get('/', (req, res) => { 
     res.send({'status': 'ok'})
 });
 
-router.get('/tasks', (req, res) => { 
-    const tasks = [ 
-        { 
-            id : 1,
-            status: 1,
-            value : 'new task from backend',
-            isEditing : false
-        },{
-            id : 2,
-            status: 2,
-            value :  'again from backend',
-            isEditing : false
-        }
-    ]
 
-    res.send({'tasks': tasks})
+router.get('/tasks', async(req, res) => { 
+    await Task.find({}, (err, result)=>{
+        if(err){
+            res.send(err)
+        }else{
+            res.send(result)
+        }
+    })
 });
 
 
-router.post('/tasks/add-task', async(req,res)=>{
-    const newTask = req.body.task
+router.post('/tasks/clean-reset', async(req, res)=>{
+    await task.collection.drop()
 
-    console.log('newTask', newTask);
-
-    // res.send({ task : newTask})
-    res.sendStatus(200)
+    await task.insertMany(tasksJson, (err, result)=>{
+        if(err){
+            res.send(err)
+        }else{
+            res.send(result)
+        }
+    })
 })
+
+router.post('/tasks/create-task', (req,res) =>{
+
+    let task = new Task({
+        value : req.body.task,
+        status : 1,
+        is_editing : false,
+        user_id : 1
+    })
+
+    task.save()
+        .then(task => res.send(task))
+        .catch( err => res.send(err))
+    
+})
+
 
 
 module.exports = router ;

@@ -5,14 +5,20 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const routes = require('./routes')
-// const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 
 dotenv.config()
 const PORT = process.env.PORT || 4001
 
-// mongoose.set('useFindAndModify', false)
-// mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.set('useFindAndModify', false)
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+
+const connection = mongoose.connection
+
+connection.once("open", ()=>{
+    console.log("Database is connected")
+})
 
 
 app.use(bodyParser.json({}))
