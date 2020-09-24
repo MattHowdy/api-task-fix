@@ -39,7 +39,10 @@ router.delete('/tasks/delete/:id', async(req,res)=>{
 router.patch('/tasks/update/:id', async(req, res)=>{
     let task = Task.findById(req.params.id)
 
-    await task.updateOne({ value : req.body.value, isEditing: false})
+    let params = req.body 
+    params['isEditing'] = false
+
+    await task.updateOne(params)
         .then( task=> res.send(task))
         .catch( err => res.send(err))
 })
