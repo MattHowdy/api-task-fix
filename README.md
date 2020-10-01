@@ -1,8 +1,8 @@
 
 # TASKFIX API
-In this minimalistic todo app you can easily manage your daily todos. 
-It allows you to add a new task, if you wish you can update them by double clicking on its name. 
-In case you accomplished your tasks you can remove it from the list by hitting the "X" button next to it name.
+In this minimalistic todo app, you can easily manage your daily todos. 
+It allows you to add a new task if you wish you can update them by double-clicking on its name. 
+In case you accomplished your tasks you can remove it from the list by hitting the "X" button next to its name.
 
 
 # INSPECT
@@ -20,8 +20,8 @@ Requirements:
 - The API may be run dev mode, where nodemon is utilized for the faster development ("npm run dev")
 
 
-For the sake of simpilicity and changeablity MongoDB is used in this project. 
-An instance is current running on cloud.mongodb.com.
+For the sake of simplicity and changeability, MongoDB is used in this project. 
+An instance is currently running on cloud.mongodb.com.
 
 
 # ENV

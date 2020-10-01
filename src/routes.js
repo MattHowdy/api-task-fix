@@ -15,7 +15,7 @@ router.get('/tasks', async(req, res) => {
 });
 
 
-router.post('/tasks/create', async(req,res) =>{
+router.post('/tasks', async(req,res) =>{
     let task = new Task({
         value : req.body.task,
         status : 1,
@@ -29,14 +29,14 @@ router.post('/tasks/create', async(req,res) =>{
     
 })
 
-router.delete('/tasks/delete/:id', async(req,res)=>{
+router.delete('/tasks/:id', async(req,res)=>{
     await Task.findOneAndDelete({ _id :req.params.id})
         .then(task => res.send(task))
         .catch( err => res.send(err))
 })
 
 
-router.patch('/tasks/update/:id', async(req, res)=>{
+router.patch('/tasks/:id', async(req, res)=>{
     let task = Task.findById(req.params.id)
 
     let params = req.body 
