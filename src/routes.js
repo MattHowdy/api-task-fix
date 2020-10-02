@@ -90,11 +90,9 @@ router.patch('/tasks/:id', async(req, res)=>{
 
 router.post('/tasks/clean-reset', async(req, res)=>{
     try {
-        await task.collection.drop()
+        await Task.collection.drop()
 
-        const tasks = await task.insertMany(tasksJson)
-        
-        console.log(tasks)
+        const tasks = await Task.insertMany(tasksJson)
 
         if (!tasks) {
             return res.sendStatus(404)
