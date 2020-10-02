@@ -9,51 +9,104 @@ router.get('/', (req, res) => {
 
 
 router.get('/tasks', async(req, res) => { 
-    await Task.find()
-        .then(task => res.send(task))
-        .catch( err => res.send(err))
+    try {
+        const tasks = await Task.find()
+  
+        if (!tasks) {
+            return res.sendStatus(404)
+        }
+  
+      res.json(tasks)
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({
+            'message' : e
+        })
+    }
 });
 
 
 router.post('/tasks', async(req,res) =>{
-    let task = new Task({
-        value : req.body.task,
-        status : 1,
-        is_editing : false,
-        user_id : 1
-    })
+    try {
+        let task = new Task({
+            _id : req.body._id,
+            value : req.body.task,
+            status : 1,
+            is_editing : false,
+            user_id : 1
+        })
 
-    await task.save()
-        .then(task => res.send(task))
-        .catch( err => res.send(err))
-    
+        const savedTask = await task.save()
+  
+        if (!savedTask) {
+            return res.sendStatus(404)
+        }
+  
+        res.status(200).json(task)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({
+          'message' : e
+      })
+    }    
 })
 
 router.delete('/tasks/:id', async(req,res)=>{
-    await Task.findOneAndDelete({ _id :req.params.id})
-        .then(task => res.send(task))
-        .catch( err => res.send(err))
+
+    try {
+        await Task.findOneAndDelete({ _id :req.params.id})
+
+        res.status(200)        
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({
+            'message' : e
+        })
+    }
+
 })
 
 
 router.patch('/tasks/:id', async(req, res)=>{
-    let task = Task.findById(req.params.id)
+    try {
+        let task = Task.findById(req.params.id)
+        let params = req.body 
+        params['isEditing'] = false
 
-    let params = req.body 
-    params['isEditing'] = false
+        const updatedTask = await task.updateOne(params)
 
-    await task.updateOne(params)
-        .then( task=> res.send(task))
-        .catch( err => res.send(err))
+        if (!updatedTask) {
+            return res.sendStatus(404)
+        }
+
+        res.status(200).json(updatedTask)
+    } catch (e) {
+          res.status(500).json({
+            'message' : e
+        })
+    }
 })
 
 
 router.post('/tasks/clean-reset', async(req, res)=>{
-    await task.collection.drop()
+    try {
+        await task.collection.drop()
 
-    await task.insertMany(tasksJson)
-        .then( res => res.send(err) )
-        .catch( err => res.send(err))
+        const tasks = await task.insertMany(tasksJson)
+        
+        console.log(tasks)
+
+        if (!tasks) {
+            return res.sendStatus(404)
+        }
+
+        res.status(200).json(tasks)
+    } catch (e) {
+        res.status(500).json({
+          'message' : e
+      })
+  }
+
 })
 
 module.exports = router ;
